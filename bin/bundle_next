@@ -1,2 +1,2 @@
 #!/bin/sh
-BUNDLE_GEMFILE=Gemfile.rails_next bundle "$@"
+BUNDLE_GEMFILE=gemfiles/rails_6.gemfile bundle "$@"

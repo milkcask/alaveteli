@@ -34,7 +34,7 @@ GIT
       activerecord (>= 3.0.9)
 
 PATH
-  remote: gems/alaveteli_features
+  remote: ../gems/alaveteli_features
   specs:
     alaveteli_features (0.0.1)
       flipper (~> 0.10)

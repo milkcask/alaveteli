@@ -16,7 +16,7 @@ jobs:
         include:
         - { ruby: 2.5 }
         - { ruby: 2.6 }
-        - { ruby: 2.6, gemfile: 'Gemfile.rails_next' }
+        - { ruby: 2.6, gemfile: 'gemfiles/rails_6.gemfile' }
 
     services:
       postgres:
