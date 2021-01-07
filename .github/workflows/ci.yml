@@ -17,6 +17,7 @@ jobs:
         - { ruby: 2.5 }
         - { ruby: 2.6 }
         - { ruby: 2.6, gemfile: 'gemfiles/rails_6.gemfile' }
+        - { ruby: 2.7, gemfile: 'gemfiles/xapian_1.4.18.gemfile' }
 
     services:
       postgres:

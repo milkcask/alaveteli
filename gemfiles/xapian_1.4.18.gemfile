@@ -1,0 +1,6 @@
+# BUNDLE_GEMFILE=gemfiles/xapian_1.4.18.gemfile bundle install
+# BUNDLE_GEMFILE=gemfiles/xapian_1.4.18.gemfile bundle exec rails s -b 0.0.0.0
+
+ENV['XAPIAN_UPGRADE'] = 'true'
+
+eval_gemfile File.expand_path('../../Gemfile', __FILE__)

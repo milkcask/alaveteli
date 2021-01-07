@@ -84,6 +84,11 @@ def rails_upgrade?
   %w[1 true].include?(ENV['RAILS_UPGRADE'])
 end
 
+# See instructions in gemfiles/xapian_1.4.17.gemfile
+def xapian_upgrade?
+  %w[1 true].include?(ENV['XAPIAN_UPGRADE'])
+end
+
 gem 'rails', rails_upgrade? ? '~> 6.0.3' : '~> 5.2.4'
   gem 'nio4r', rails_upgrade? ? nil : '< 2.5.3'
 
@@ -128,7 +133,11 @@ gem 'syslog_protocol', '~> 0.9.0'
 gem 'thin', '~> 1.8.0'
 gem 'vpim', '~> 13.11.11'
 gem 'will_paginate', '~> 3.3.0'
-gem 'xapian-full-alaveteli', '~> 1.4.11.1'
+if xapian_upgrade?
+  gem 'xapian-full-alaveteli', '~> 1.4.18.1'
+else
+  gem 'xapian-full-alaveteli', '~> 1.4.11.1'
+end
 gem 'xml-simple', '~> 1.1.8', :require => 'xmlsimple'
 gem 'zip_tricks', '~> 5.5.0'
 
