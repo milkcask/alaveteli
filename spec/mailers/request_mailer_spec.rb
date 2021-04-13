@@ -992,27 +992,27 @@ describe RequestMailer do
       ActionMailer::Base.deliveries = []
     end
 
-    def get_surveyable_request(user=nil)
+    def get_surveyable_request(user = nil)
       info_request = if user
-        FactoryBot.create(:info_request, :user => user)
-      else
-        FactoryBot.create(:info_request)
-      end
+                       FactoryBot.create(:info_request, user: user)
+                     else
+                       FactoryBot.create(:info_request)
+                     end
       info_request.created_at = Time.now - (2.weeks + 1.hour)
       info_request.save!
       info_request
     end
 
     it 'sends survey alerts' do
-        expect(RequestMailer).to receive(:alert_survey)
-        RequestMailer.alert_new_response_reminders
+      expect(RequestMailer).to receive(:alert_survey)
+      RequestMailer.alert_new_response_reminders
     end
 
     context 'when there is a requester who has not been sent a survey alert' do
 
       it 'sends a survey alert' do
         allow_any_instance_of(User).to receive(:survey).
-          and_return(double('survey', :already_done? => false))
+          and_return(double('survey', already_done?: false))
         get_surveyable_request
         RequestMailer.alert_new_response_reminders
         expect(ActionMailer::Base.deliveries.size).to eq(1)
@@ -1020,7 +1020,7 @@ describe RequestMailer do
 
       it 'records the sending of the alert' do
         allow_any_instance_of(User).to receive(:survey).
-          and_return(double('survey', :already_done? => false))
+          and_return(double('survey', already_done?: false))
         info_request = get_surveyable_request
         RequestMailer.alert_new_response_reminders
         expect(info_request.user.user_info_request_sent_alerts.size).
@@ -1033,11 +1033,11 @@ describe RequestMailer do
 
       it 'does not send a survey alert' do
         allow_any_instance_of(User).to receive(:survey).
-          and_return(double('survey', :already_done? => false))
+          and_return(double('survey', already_done?: false))
         info_request = get_surveyable_request
         info_request.user.user_info_request_sent_alerts.
-          create(:alert_type => 'survey_1',
-                  :info_request_id => info_request.id)
+          create(alert_type: 'survey_1',
+                 info_request_id: info_request.id)
         RequestMailer.alert_new_response_reminders
         expect(ActionMailer::Base.deliveries.size).to eq(0)
       end
@@ -1048,7 +1048,7 @@ describe RequestMailer do
 
       it 'does not send a survey alert' do
         allow_any_instance_of(User).to receive(:survey).
-          and_return(double('survey', :already_done? => true))
+          and_return(double('survey', already_done?: true))
         get_surveyable_request
         RequestMailer.alert_new_response_reminders
         expect(ActionMailer::Base.deliveries.size).to eq(0)
@@ -1059,7 +1059,7 @@ describe RequestMailer do
 
       it 'does not send multiple alerts' do
         allow_any_instance_of(User).to receive(:survey).
-          and_return(double('survey', :already_done? => false))
+          and_return(double('survey', already_done?: false))
         request = get_surveyable_request
         get_surveyable_request(request.user)
         RequestMailer.alert_new_response_reminders
@@ -1071,7 +1071,7 @@ describe RequestMailer do
 
       it 'does not send a survey alert' do
         allow_any_instance_of(User).to receive(:survey).
-          and_return(double('survey', :already_done? => false))
+          and_return(double('survey', already_done?: false))
         allow_any_instance_of(User).to receive(:active?).
           and_return(false)
         get_surveyable_request
