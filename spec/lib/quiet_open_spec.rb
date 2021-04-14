@@ -12,14 +12,24 @@ describe "quietly_try_to_open" do
   end
 
   it "should send a default timeout of 60 seconds" do
-    expect(controller).to receive(:open).with(uri, {:read_timeout=>60}).
-      and_return(empty_stream)
+    if RUBY_VERSION >= '2.7'
+      expect(URI).to receive(:open).with(uri, read_timeout: 60).
+        and_return(empty_stream)
+    else
+      expect(controller).to receive(:open).with(uri, read_timeout: 60).
+        and_return(empty_stream)
+    end
     controller.send(:quietly_try_to_open, uri)
   end
 
-  it "should allow the timeout out be overriden " do
-    expect(controller).to receive(:open).with(uri, {:read_timeout=>100}).
-      and_return(empty_stream)
+  it "should allow the timeout out be overriden" do
+    if RUBY_VERSION >= '2.7'
+      expect(URI).to receive(:open).with(uri, read_timeout: 100).
+        and_return(empty_stream)
+    else
+      expect(controller).to receive(:open).with(uri, read_timeout: 100).
+        and_return(empty_stream)
+    end
     controller.send(:quietly_try_to_open, uri, 100)
   end
 

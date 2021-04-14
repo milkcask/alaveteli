@@ -1,9 +1,13 @@
 # -*- encoding : utf-8 -*-
-require 'open-uri'
+require 'open-uri' unless RUBY_VERSION >= '2.7'
 
 def quietly_try_to_open(url, timeout=60)
   begin
-    result = open(url, :read_timeout => timeout).read.strip
+    result = if RUBY_VERSION >= '2.7'
+               URI.open(url, :read_timeout => timeout).read.strip
+             else
+               open(url, :read_timeout => timeout).read.strip
+             end
   rescue OpenURI::HTTPError,
          SocketError,
          Errno::ETIMEDOUT,
