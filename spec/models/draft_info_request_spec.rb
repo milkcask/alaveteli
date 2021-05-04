@@ -15,6 +15,8 @@
 require 'spec_helper'
 
 describe DraftInfoRequest do
+  it_behaves_like 'RequestSummaries'
+
   let(:draft) { FactoryBot.create(:draft_info_request) }
 
   it "requires a user" do
@@ -23,6 +25,4 @@ describe DraftInfoRequest do
     draft_request.user = FactoryBot.create(:user)
     expect(draft_request.valid?).to be true
   end
-
-  it_behaves_like "RequestSummaries"
 end
