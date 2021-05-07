@@ -546,42 +546,20 @@ class RequestMailer < ApplicationMailer
   def self.alert_survey
     return unless Survey.enabled?
 
-    # Exclude requests made by users who have already been alerted about the survey
-    info_requests = InfoRequest.internal.
-      where(
-      <<~SQL
-        created_at BETWEEN
-          NOW() - '2 weeks + 1 day'::interval AND
-          NOW() - '2 weeks'::interval
-        AND NOT EXISTS (
-            SELECT *
-            FROM user_info_request_sent_alerts
-            WHERE user_id = info_requests.user_id
-            AND alert_type = 'survey_1'
-        )
-      SQL
-    ).includes(:user)
+    date_range = 1.month.ago.at_beginning_of_day..1.month.ago.at_end_of_day
+    info_requests = InfoRequest.internal.where(created_at: date_range)
 
-    # TODO: change the initial query to iterate over users rather
-    # than info_requests rather than using an array to check whether
-    # we're about to send multiple emails to the same user_id
-    sent_to = []
-    info_requests.each do |info_request|
+    info_requests.group_by(&:user_id).each do |_, (info_request, *)|
       # Exclude users who have already completed the survey or
       # have already been sent a survey email in this run
       logger.debug "[alert_survey] Considering #{info_request.user.url_name}"
-      if !info_request.user.can_send_survey? ||
-         sent_to.include?(info_request.user_id)
-        next
-      end
+      next unless info_request.user.can_send_survey?
 
       store_sent = UserInfoRequestSentAlert.new
       store_sent.info_request = info_request
       store_sent.user = info_request.user
       store_sent.alert_type = 'survey_1'
       store_sent.info_request_event_id = info_request.info_request_events[0].id
-
-      sent_to << info_request.user_id
 
       RequestMailer.survey_alert(info_request).deliver_now
       store_sent.save!
