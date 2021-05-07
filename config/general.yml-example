@@ -1301,8 +1301,18 @@ ENABLE_PROJECTS: false
 # We need to add the WDTK survey variables here, or else the deployment
 # system will cry.
 SURVEY_SECRET: ''
-# Blank this out if the survey host is unavailable - people going to the
-# survey URL will get a message that the survey is unavailable
+
+# If ENABLE_SURVEY_EMAILS is set to true, Alaveteli will email users a month
+# after their request was made with a link to a survey.
+#
+# ENABLE_SURVEY_EMAILS – Boolean (default: false)
+#
+# --
+ENABLE_SURVEY_EMAILS: false
+
+# The URL to be sent to users when ENABLE_SURVEY_EMAILS is set to true.
+#
+# SURVEY_URL – String (default: '')
+#
+# --
 SURVEY_URL: ''
-# Set this to false if you don't want survey emails to be sent
-SEND_SURVEY_MAILS: true

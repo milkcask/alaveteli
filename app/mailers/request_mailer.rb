@@ -522,6 +522,8 @@ class RequestMailer < ApplicationMailer
   end
 
   def survey_alert(info_request)
+    return unless Survey.enabled?
+
     user = info_request.user
 
     post_redirect = PostRedirect.new(
@@ -549,7 +551,7 @@ class RequestMailer < ApplicationMailer
   # Send an email with a link to the survey two weeks after a request was made,
   # if the user has not already completed the survey.
   def self.alert_survey
-    return unless AlaveteliConfiguration.send_survey_mails
+    return unless Survey.enabled?
 
     # Exclude requests made by users who have already been alerted about the survey
     info_requests = InfoRequest.internal.
