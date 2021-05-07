@@ -530,14 +530,20 @@ class RequestMailer < ApplicationMailer
     )
     post_redirect.save!
     @url = confirm_url(email_token: post_redirect.email_token)
-
-    headers('Return-Path' => blackhole_email, 'Reply-To' => contact_from_name_and_email, # not much we can do if the user's email is broken
-            'Auto-Submitted' => 'auto-generated', # http://tools.ietf.org/html/rfc3834
-            'X-Auto-Response-Suppress' => 'OOF')
     @info_request = info_request
-    mail(to: user.name_and_email,
-         from: contact_from_name_and_email,
-         subject: "Can you help us improve WhatDoTheyKnow?")
+
+    headers(
+      'Return-Path' => blackhole_email,
+      'Reply-To' => contact_from_name_and_email,
+      'Auto-Submitted' => 'auto-generated',
+      'X-Auto-Response-Suppress' => 'OOF'
+    )
+
+    mail(
+      to: user.name_and_email,
+      from: contact_from_name_and_email,
+      subject: 'Can you help us improve WhatDoTheyKnow?'
+    )
   end
 
   # Send an email with a link to the survey two weeks after a request was made,
