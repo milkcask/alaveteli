@@ -1298,10 +1298,6 @@ ENABLE_PRO_SELF_SERVE: false
 # ---
 ENABLE_PROJECTS: false
 
-# We need to add the WDTK survey variables here, or else the deployment
-# system will cry.
-SURVEY_SECRET: ''
-
 # If ENABLE_SURVEY_EMAILS is set to true, Alaveteli will email users a month
 # after their request was made with a link to a survey.
 #
