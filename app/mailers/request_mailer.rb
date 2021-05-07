@@ -524,15 +524,8 @@ class RequestMailer < ApplicationMailer
   def survey_alert(info_request)
     return unless Survey.enabled?
 
-    user = info_request.user
-
-    post_redirect = PostRedirect.new(
-      uri: survey_url,
-      user_id: user.id
-    )
-    post_redirect.save!
-    @url = confirm_url(email_token: post_redirect.email_token)
     @info_request = info_request
+    @url = Survey.url(info_request)
 
     headers(
       'Return-Path' => blackhole_email,
@@ -542,7 +535,7 @@ class RequestMailer < ApplicationMailer
     )
 
     mail(
-      to: user.name_and_email,
+      to: info_request.user.name_and_email,
       from: contact_from_name_and_email,
       subject: 'Can you help us improve WhatDoTheyKnow?'
     )
