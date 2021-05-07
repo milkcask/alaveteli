@@ -552,12 +552,12 @@ class RequestMailer < ApplicationMailer
     return unless AlaveteliConfiguration.send_survey_mails
 
     # Exclude requests made by users who have already been alerted about the survey
-    info_requests = InfoRequest.where(
+    info_requests = InfoRequest.internal.
+      where(
       <<~SQL
         created_at BETWEEN
           NOW() - '2 weeks + 1 day'::interval AND
           NOW() - '2 weeks'::interval
-        AND user_id IS NOT NULL
         AND NOT EXISTS (
             SELECT *
             FROM user_info_request_sent_alerts

@@ -37,6 +37,26 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe InfoRequest do
+  describe 'scopes' do
+    let!(:internal) do
+      FactoryBot.create(:info_request)
+    end
+
+    let!(:external) do
+      FactoryBot.create(:info_request, :external)
+    end
+
+    it 'can scope to internal info requests' do
+      expect(described_class.internal).to include(internal)
+      expect(described_class.internal).to_not include(external)
+    end
+
+    it 'can scope to external info requests' do
+      expect(described_class.external).to_not include(internal)
+      expect(described_class.external).to include(external)
+    end
+  end
+
   describe '#foi_attachments' do
     subject { info_request.foi_attachments }
 
