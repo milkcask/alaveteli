@@ -28,18 +28,8 @@ module InfoRequest::TitleValidation
 
   def title_formatting
     return unless title
-
-    if poorly_formed_title?
-      errors.add(:title, _('Please write the summary using a mixture of ' \
-                           'capital and lower case letters. This makes it ' \
-                           'easier for others to read.'))
-    end
-
-    if generic_foi_title?
-      errors.add(:title, _('Please describe more what the request is about ' \
-                           'in the subject. There is no need to say it is an ' \
-                           'FOI request, we add that on anyway.'))
-    end
+    errors.add(:title, poorly_formed_title_msg) if poorly_formed_title?
+    errors.add(:title, generic_foi_title_msg) if generic_foi_title?
   end
 
   def title_is_acronym(max_length)
@@ -60,7 +50,19 @@ module InfoRequest::TitleValidation
       title_is_acronym(6)
   end
 
+  def poorly_formed_title_msg
+    _('Please write the summary using a mixture of ' \
+      'capital and lower case letters. This makes it ' \
+      'easier for others to read.')
+  end
+
   def generic_foi_title?
     title =~ /^(FOI|Freedom of Information)\s*requests?$/i
+  end
+
+  def generic_foi_title_msg
+    _('Please describe more what the request is about ' \
+      'in the subject. There is no need to say it is an ' \
+      'FOI request, we add that on anyway.')
   end
 end
