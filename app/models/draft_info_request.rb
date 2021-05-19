@@ -15,6 +15,7 @@
 
 class DraftInfoRequest < ApplicationRecord
   include AlaveteliPro::RequestSummaries
+  include InfoRequest::DraftTitleValidation
 
   validates_presence_of :user
 
